@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Data Anggota 
+                <a href="{% url 'tambah_anggota' %}" class="btn btn-primary">Tambah</a>
+                <a href="{% url 'export_xls' %}" class="btn btn-success">Export .xls</a>
+            </h3>
+
+            {% for message in messages %}
+                {% if message %}
+                <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>FOTO</th>
+                    <th>NO ANGGOTA</th>
+                    <th>NAMA</th>
+                    <th>NIK</th>
+                    <th>ALAMAT</th>
+                    <th>INSTANSI</th>
+                    <th>DPC</th>
+                    <th>ACTION</th>
+                </thead>
+                <tbody>
+                    {% for anggota in anggot %} 
+                    <tr>
+                        <td>
+                            {% if anggota.cover %}
+                            <img src="{{ anggota.cover.url }}" width="90px">
+                            {% endif %}
+                        </td>
+                        <td><a href="{% url 'ubah_anggota' anggota.id %}">{{ anggota.no_anggota}}</a></td>
+                        <td>{{ anggota.nama}}</td>
+                        <td>{{ anggota.nik}}</td>
+                        <td>{{ anggota.alamat}}</td>
+                        <td>{{ anggota.instansi}}</td>
+                        <td>{{ anggota.dpc_id}}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hapus-{{ anggota.id }}">
+                                Hapus
+                              </button>
+                        </td>
+
+                        <div class="modal" id="hapus-{{ anggota.id }}">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h3 class="modal-title">Hapus</h3>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Yakin menghapus <strong>{{ anggota.nama | upper}}</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'hapus_anggota' anggota.id %}" class="btn btn-danger">Hapus</a>
+                                    <button class="btn btn-dark" data-dismiss = "modal">Tidak</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
